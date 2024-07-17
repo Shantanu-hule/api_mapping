@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Project</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .topnav {
+            background-color: #007bff;
+            overflow: hidden;
+        }
+        .topnav nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .topnav nav ul li {
+            float: left;
+        }
+        .topnav nav ul li a {   
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .topnav nav ul li a:hover {
+            background-color: #81e3fc;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="topnav">
+        <nav>
+            <ul>
+                <li><a class="active" href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'project' %}">Projects</a></li>
+                <!-- <li><a href="{% url 'mapping' %}">Mapping</a></li> -->
+                <li><a href="{% url 'create_project' %}">Create Project</a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <h1>Create Project</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+       
+        <label for="project_name">Project Name:</label>
+        <input type="text" id="project_name" name="project_name" value="{{ form.project_name.value }}">
+    
+        <label for="project_manager">Project Manager:</label>
+        <input type="text" id="project_manager" name="project_manager" value="{{ form.project_manager.value }}">
+    
+        <label for="mapping_type">Mapping Type:</label>
+        <select id="mapping_type" name="mapping_type" onchange="showHideFields()">
+            {% for choice in form.mapping_type.field.choices %}
+                <option value="{{ choice.0 }}" {% if form.mapping_type.value == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+    
+        <div id="singleInput" style="display: none;">
+            <label for="api">Source:</label>
+            <input type="text" id="api" name="api" value="{{ form.api.value }}"> 
+
+            <label for="source_type">Source Type:</label>
+            <select id="source_type" name="source_type" onchange="updateSubtypes(this, 'source_subtype')">
+                <option value="">Select Source Type</option>
+                {% for type in form.fields.source_type.queryset %}
+                    <option value="{{ type.id }}" {% if form.source_type.value == type.id %}selected{% endif %}>{{ type.type }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="source_subtype">Source Subtype:</label>
+            <select id="source_subtype" name="source_subtype">
+                <option value="">Select Source Subtype</option>
+                {% for subtype in form.fields.source_subtype.queryset %}
+                    <option value="{{ subtype.id }}" {% if form.source_subtype.value == subtype.id %}selected{% endif %}>{{ subtype.subtype }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="mapping">Destination:</label>
+            <input type="text" id="mapping" name="mapping" value="{{ form.mapping.value }}">
+
+            <label for="destination_type">Destination Type:</label>
+            <select id="destination_type" name="destination_type" onchange="updateSubtypes(this, 'destination_subtype')">
+                <option value="">Select Destination Type</option>
+                {% for type in form.fields.destination_type.queryset %}
+                    <option value="{{ type.id }}" {% if form.destination_type.value == type.id %}selected{% endif %}>{{ type.type }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="destination_subtype">Destination Subtype:</label>
+            <select id="destination_subtype" name="destination_subtype">
+                <option value="">Select Destination Subtype</option>
+                {% for subtype in form.fields.destination_subtype.queryset %}
+                    <option value="{{ subtype.id }}" {% if form.destination_subtype.value == subtype.id %}selected{% endif %}>{{ subtype.subtype }}</option>
+                {% endfor %}
+            </select>
+            <label for="flow_num">Flow Num:</label>
+            <input type="flow_num" id="flow_num" name="flow_num" value="{{ form.flow_num.value }}"> 
+            <label for="two_way">Two Way:</label>
+            <input type="checkbox" id="two_way" name="two_way"><br>
+        </div>
+
+        <div id="excelFile" style="display: none;">
+            <label for="excel_file">Upload Excel File:</label>
+            <input type="file" id="excel_file" name="excel_file" value="{{ form.excel_file.value }}">
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <button type="submit">Create Project</button>
+    </form>
+
+    <script>
+
+function displayMessage(message) {
+            alert(message);
+        }
+        function showHideFields() {
+            const mappingType = document.getElementById('mapping_type').value;
+            if (mappingType === 'single_input') {
+                document.getElementById('singleInput').style.display = 'block';
+                document.getElementById('excelFile').style.display = 'none';
+            } else if (mappingType === 'excel_file') {
+                document.getElementById('singleInput').style.display = 'none';
+                document.getElementById('excelFile').style.display = 'block';
+            }
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            showHideFields();
+        });
+
+        function updateSubtypes(typeDropdown, subtypeDropdownId) {
+            const typeId = typeDropdown.value;
+            const subtypeDropdown = document.getElementById(subtypeDropdownId);
+
+            // Clear existing options in subtype dropdown
+            while (subtypeDropdown.options.length > 1) {
+                subtypeDropdown.remove(1);
+            }
+
+            if (typeId) {
+                fetch(`/get_subtypes/${typeId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.subtypes.forEach(subtype => {
+                            const option = new Option(subtype.subtype, subtype.id);
+                            subtypeDropdown.add(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching subtypes:', error));
+            }
+        }
+    </script>
+    
+</body>
+</html>

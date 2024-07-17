@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django App{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .topnav {
+            background-color: #007bff;
+            overflow: hidden;
+        }
+        .topnav nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .topnav nav ul li {
+            float: left;
+        }
+        .topnav nav ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .topnav nav ul li a:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        .mermaid {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+
+</head>
+<body>
+    <div class="topnav">
+        <nav>
+            <ul>
+                <li><a  class="active" href="{% url 'home' %}">Home</a></li>
+                <li><a  href="{% url 'project' %}">Projects</a></li>
+                <li><a href="{% url 'mapping' %}">Mapping</a></li>
+                <li><a href="{% url 'create_project' %}">Create Project</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="content">
+        <h1>API Flow Mapping</h1>
+        {% for project in projects %}
+        <h2>{{ project.project_name }}</h2>
+        <div class="mermaid">
+            {{ project.mapping|safe }}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

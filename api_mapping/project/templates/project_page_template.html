@@ -1,0 +1,511 @@
+<!-- project_page_template.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ project.project_name }}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script>
+        // mermaid.initialize({ startOnLoad: true });
+        document.addEventListener('DOMContentLoaded', (event) => {
+            mermaid.initialize({ startOnLoad: true });
+        });
+
+
+
+        function loadSubtypes_1() {
+    var typeSelect = document.getElementById('type_up');
+    var subtypeSelect = document.getElementById('subtype_up');
+    var typeValue = typeSelect.value;
+
+    fetch(`/get_subadd/${typeValue}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Clear existing options
+            subtypeSelect.innerHTML = '';
+            // Populate with new options
+            data.subtypes.forEach(subtype => {
+                var option = document.createElement('option');
+                option.value = subtype.subtype;
+                option.text = subtype.subtype;
+                subtypeSelect.add(option);
+            });
+        });
+}
+
+
+        function loadSubtypes(type) {
+    var typeSelect = document.getElementById(type + '_type');
+    var subtypeSelect = document.getElementById(type + '_subtype');
+    var typeValue = typeSelect.value;
+
+    fetch(`/get_subadd/${typeValue}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Clear existing options
+            subtypeSelect.innerHTML = '';
+            // Populate with new options
+            data.subtypes.forEach(subtype => {
+                var option = document.createElement('option');
+                option.value = subtype.subtype;
+                option.text = subtype.subtype;
+                subtypeSelect.add(option);
+            });
+        });
+}
+
+function updateSubtypes(typeDropdown, subtypeDropdownId) {
+            const typeId = typeDropdown.value;
+            const subtypeDropdown = document.getElementById(subtypeDropdownId);
+
+            // Clear existing options in subtype dropdown
+            while (subtypeDropdown.options.length > 1) {
+                subtypeDropdown.remove(1);
+            }
+
+            if (typeId) {
+                fetch(`/get_subtypes/${typeId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.subtypes.forEach(subtype => {
+                            const option = new Option(subtype.subtype, subtype.id);
+                            subtypeDropdown.add(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching subtypes:', error));
+            }
+        }
+
+
+    function showMsg(){
+        var element = document.getElementById("formid");
+        var rmform = document.getElementById("rmformid");
+        var upmap=document.getElementById('upmap')
+        if(element.style.display === "none"){
+            element.style.display = "block";
+            rmform.style.display = "none";
+            upmap.style.display = 'none';
+        }
+            else{
+                element.style.display="none";
+            }
+    }
+    function showupdate(){
+        var el=document.getElementById("rmformid");
+        var addform = document.getElementById("formid");
+        var upmap=document.getElementById('upmap')
+        if(upmap.style.display === 'none'){
+            upmap.style.display = 'block';
+            addform.style.display = 'none';
+            el.style.display = 'none';
+        }
+        else{
+            upmap.style.display = 'none';
+        }
+    }
+    function showRemove(){
+        var el=document.getElementById("rmformid");
+        var addform = document.getElementById("formid");
+        if(el.style.display === "none"){
+            el.style.display = "block";
+            addform.style.display = "none";
+            upmap.style.display = 'none';
+        }
+        else{
+            el.style.display = "none";
+        }
+    }
+    </script>
+    <style>
+        .topnav {
+            background-color: #007bff;
+            overflow: hidden;
+        }
+        .topnav nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .topnav nav ul li {
+            float: left;
+        }
+        .topnav nav ul li a {   
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .topnav nav ul li a:hover {
+            background-color: #81e3fc;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .mermaid {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .source-group{
+            display:flex;
+            justify-content: space-between;
+            align-items: left;
+        }
+        .source-group1{
+            /* display:flex; */
+            justify-content: space-between;
+            align-items: left;
+        }
+
+
+        .sourceform-group{
+            width: 47%;
+        }
+
+        .dest-group{
+            display:flex;
+            justify-content:space-between;
+            align-items:left;
+        }
+
+        .destform-group{
+            width: 47%;
+        }
+
+        .checkform-group{
+            display:flex;
+            align-items:center;
+        }
+
+        .twowaylabel{
+            margin-top: 9px;
+        }
+        #two_way{
+            width: 15px;
+            height: 15px;
+            margin-left: 10px;
+        }
+        h2{
+            text-align:center;
+            color: #007bff;
+            font-weight: 600;
+        }
+        
+        #formid{
+            display: none;
+        }
+
+        #rmformid{
+            display:none;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            color: black;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 5px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            cursor: pointer;
+        }
+
+        .addmapping{
+            width: auto;
+            background-color:#f7f7f7;
+            color: black;
+        }
+        .removemapping{
+            margin-left:10px;
+            width: auto;
+            background-color:#f7f7f7;
+            color: black;
+            
+        }
+        .updatemapping{
+            margin-left:10px;
+            width: auto;
+            background-color:#f7f7f7;
+            color: black;
+            
+        }
+        .buttonflex{
+            display: flex;
+            margin-left: 20%;
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <!-- <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script> -->
+</head>
+<body>
+    <div class="topnav">
+        <nav>
+            <ul>
+                <li><a class="active" href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'project' %}">Projects</a></li>
+                <!-- <li><a href="{% url 'mapping' %}">Mapping</a></li> -->
+                <li><a href="{% url 'create_project' %}">create_project</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="content">
+        <h1>{{ project.project_name }}</h1>
+        
+        <h2>{{ project.project_manager }}</h2>
+        <div class="mermaid">
+            {{ send_mapping|safe }}
+        </div>
+    </div>
+    <!-- <h2>Add API Mapping:</h2> -->
+    <!-- <form method="post" action="{% url 'add_mapping' project.id %}">
+        {% csrf_token %}
+        <label for="api">Source:</label>
+        <input type="text" id="api" name="api"><br>
+        <label for="mapping">Destination:</label>
+        <input type="text" id="mapping" name="mapping"><br>
+        <button type="submit">Add Mapping</button>
+    </form> -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <br>
+    <div class="buttonflex">
+        <button onclick=showMsg() class="addmapping"><i class="fa-solid fa-plus"></i> Add Mapping</button>
+        <button onclick=showRemove() class="removemapping"><i class="fa-solid fa-plus"></i> Remove Mapping</button>
+        <button onclick=showupdate() class="updatemapping"><i class="fa-solid fa-plus"></i>Update Mapping</button>
+    </div>
+    <div class="container">
+        <div class="form-container" id="formid">
+    <!-- <h2>Add API Mapping:</h2> -->
+    <form method="post" action="{% url 'add_mapping' project.id %}">
+    {% csrf_token %}
+    <h2>ADD API MAPPING</h2>
+    <div class="form-group">
+    <label for="api">Source:</label>
+    <input type="text" id="api" name="api"><br>
+    </div>
+    <div class="source-group">
+        <div class="sourceform-group">
+            <label for="source_type">Source Type:</label>
+            <select id="source_type" name="source_type" onchange="loadSubtypes('source')">
+            {% for type in source_types %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+            </select><br>
+        </div>
+        <div class="sourceform-group">
+            <label for="source_subtype">Source Subtype:</label>
+            <select id="source_subtype" name="source_subtype">
+            <!-- Options will be populated by JavaScript -->
+            </select><br>
+        </div>
+    </div>
+    <div class="form-group">
+    <label for="mapping">Destination:</label>
+    <input type="text" id="mapping" name="mapping"><br>
+    </div>
+    <div class="dest-group">
+    <div class="destform-group">
+    <label for="destination_type">Destination Type:</label>
+    <select id="destination_type" name="destination_type" onchange="loadSubtypes('destination')">
+        {% for type in destination_types %}
+            <option value="{{ type }}">{{ type }}</option>
+        {% endfor %}
+    </select><br>
+    </div>
+    <div class="destform-group">
+    <label for="destination_subtype">Destination Subtype:</label>
+    <select id="destination_subtype" name="destination_subtype">
+        <!-- Options will be populated by JavaScript -->
+    </select><br>
+    </div>
+</div>
+<div class="form-group">
+    <label for="flow_num">Flow Num:</label>
+    <input type="text" id="flow_num" name="flow_num"><br>
+    </div>
+    <div class="checkform-group">
+        <label for="two_way" class="twowaylabel">Two Way Mapping:</label>
+        <input type="checkbox" id="two_way" name="two_way"><br>
+    </div>
+    <br>
+    <button type="submit">Add Mapping</button>
+</form>
+        </div>
+    </div>
+    <div class="container">
+    <div class="form-container" id="rmformid">
+       <form method="post" action="{% url 'remove_mapping' project.id %}">
+            {% csrf_token %}
+            <h2>REMOVE API MAPPING</h2>
+            <div class="source-group1">
+                <div class="sourceform-group">
+                <label for="source">NAME:</label>
+                <input type="text" id="source" name="source"><br>
+                
+            </div>
+
+            <button type="submit">Remove Mapping</button>
+        </form>
+    </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="form-container" id="upmap">
+        <form method="post" action="{% url 'update_node' project.id %}">
+            {% csrf_token %}
+            <h2>Update Node Name</h2>
+            
+            <div class="form-group">
+                <label for="node_name">Current Node Name:</label>
+                <input type="text" id="node_name" name="node_name" required>
+            </div>
+            
+            <!-- New Name Field -->
+            <div class="form-group">
+                <label for="new_node_name">New Node Name:</label>
+                <input type="text" id="new_node_name" name="new_node_name" required>
+            </div>    
+           
+            <div class="form-group">
+                <label for="type_up">Type:</label>
+                <select id="type_up" name="type_up"  onchange="loadSubtypes_1('source')">
+                    {% for type in source_types %}
+                    <option value="{{ type }}">{{ type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            
+            <div class="form-group">
+                <label for="subtype_up">Subtype:</label>
+                <select id="subtype_up" name="subtype_up" >
+                   
+                </select>
+            </div>
+    
+            <button type="submit">Update Node</button>
+        </form>
+        <!-- <button><a href="{% url 'project_page' project.id %}">Back</a></button> -->
+         </div>
+         
+    </div>
+    <br>    
+    <div class="content">
+        <h2>Select an API to view its mappings:</h2>
+        <select id="api-select" onchange="location = this.value;">
+            <option value="">Select an API</option>
+            {% for api in apis %}
+            <!-- <option value="{% url 'select_api' project.id api %}">{{ api }}</option> -->
+            {% if '<' not in api%}
+            <option value="{% url 'select_api' project.id api %}" >{{ api }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        
+        <!-- Selected API Diagram -->
+        {% if selected_api %}
+        <h3>Mappings for API: {{ selected_api }}</h3>
+        <div id="selected-api-diagram">
+            <div class="mermaid">
+                graph TD;
+                {{ filtered_mappings|safe }}
+                
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+<br>
+    <div class="content">
+    <div class="Versions">
+        <h2>
+            Versions
+        </h2>
+        <select id="version-select" onchange="location = this.value;">
+            <option value="">Select Version</option>
+            {% for ver in versions%}
+                <option value="{% url 'select_version' project.id ver %}">{{ ver }}</option>
+            {% endfor %}
+        </select>
+        {% if ver %}
+        <h3>Mappings for Version: {{ ver }}</h3>
+        <h4>Version created:  {{ version_time }}</h4>
+        <div id="selected-ver-diagram">
+            <div class="mermaid">
+
+                {{ version_mapping|safe }}
+                
+            </div>
+        </div>
+        {% endif %}
+
+
+    </div>
+</div>
+    </body>
+</html>

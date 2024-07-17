@@ -1,0 +1,126 @@
+<!-- project_manager/templates/home.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+   <script>
+    function myFunction() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("myBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more";
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less";
+    moreText.style.display = "inline";
+  }
+}
+   </script>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .topnav {
+            background-color: #007bff;
+            overflow: hidden;
+        }
+        .topnav nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .topnav nav ul li {
+            float: left;
+        }
+        .topnav nav ul li a {   
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .topnav nav ul li a:hover {
+            background-color: #81e3fc;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .description {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="topnav">
+    <nav>
+        <ul>
+            <li><a class="active"  href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'project' %}">Projects</a></li>
+           
+            <li><a href="{% url 'create_project' %}">create_project</a></li>
+            <li><a href="{% url 'admin_page' %}">Admin</a></li>
+            
+        </ul>
+    </nav>
+</div>
+<div class="container">
+    <div class="header">
+        <h1>Welcome to API Flow Mapping</h1>
+    </div>
+    <div class="description">
+        
+        <p>API Flow Mapping is a web application designed to facilitate the representation and visualization of API flows, our platform offers intuitive tools to map out the intricate connections between various APIs in your project.</p>
+        <h2>Visualize Your API Flows</h2>
+        <p>With API Flow Mapping, you can create clear and comprehensive visual representations of how APIs interact within your project. Our intuitive interface allows you to draw connections between APIs, illustrating the flow of data and requests across your system.</p>
+        <h2>Effortless Project Management</h2>
+        <p>Get started by creating a new project in just a few clicks. Whether you're mapping out a single API flow or importing data from an Excel sheet, our platform streamlines the project creation process, so you can focus on visualizing your API architecture.</p>
+        <h2>Flexible Mapping Options</h2>
+        <p>Choose from multiple mapping options to suit your project needs. Whether you prefer to input API flows manually, use a single API flow input, or import data from an Excel sheet, API Flow Mapping offers flexible solutions to accommodate your workflow.</p>
+        
+    </div>
+    <div class="cta">
+        <a href="{% url 'create_project' %}" class="btn">Get Started</a>
+    </div>
+</div>
+    
+</body>
+</html>

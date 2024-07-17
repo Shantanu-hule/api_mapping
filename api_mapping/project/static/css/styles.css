@@ -1,0 +1,96 @@
+nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.content {
+    padding: 20px;
+}
+
+
+
+
+#form_body {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #form_body td, #form_body th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #form_body tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #form_body tr:hover {background-color: #ddd;}
+  
+  #form_body th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #0aabc7;
+    color: white;
+  }
+
+  .carousel-item img{
+    margin-left: auto;
+    margin-right: auto;
+    height: 500px;
+    width: 50px;
+    padding-left: 250px;
+    padding-right: 250px;
+    padding-top: 5px;
+    padding-bottom: 30px;
+
+  }
+
+
+
+  .topnav {
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+  /* Style the links inside the navigation bar */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #96dff1;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #19a0fa;
+  color: white;
+}
+
+#more {display: none;}
+
